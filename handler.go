@@ -8,7 +8,7 @@ import (
 
 func TestHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello My Server")
-	fmt.Println("Handler File")
+	fmt.Println("Endpoint Hit: /")
 }
 
 func GetArticleHandler(w http.ResponseWriter, r *http.Request) {
@@ -19,6 +19,7 @@ func GetArticleHandler(w http.ResponseWriter, r *http.Request) {
 			articles,
 			Article{Title: fmt.Sprintf(title, i), Desc: "Article Description", Content: "Article Content"})
 	}
+
 	fmt.Println("Endpoint Hit: /article")
 	json.NewEncoder(w).Encode(articles)
 }
