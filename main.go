@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", Handler)
+	http.HandleFunc("/", TestHandler)
+	http.HandleFunc("/article", GetArticleHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
