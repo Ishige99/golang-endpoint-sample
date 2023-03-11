@@ -20,3 +20,7 @@
 % curl 'http://localhost:8080/article'
 // JSON Responce (article)
 ```
+
+## Reference
+
+- [Goで簡易的なAPIサーバーを立てる](https://qiita.com/entaku0818/items/c29add790718c215381e)
