@@ -15,7 +15,7 @@
 % ./main
 ```
 
-- Start MySQL
+- Start MySQL / phpMyAdmin
 
 ```shell
 % docker-compose up -d
