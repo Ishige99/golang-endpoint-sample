@@ -5,6 +5,7 @@
 - MacBook Pro(M1,2021)
 - macOS Monterey v12.2.1
 - go version go1.20 darwin/arm64
+- Docker version 20.10.22
 
 ## Build
 
