@@ -14,8 +14,6 @@ services:
     ports:
       - 3307:3307
     volumes:
-      # DB設定ファイル
-      - ./db/my.cnf:/docker-entrypoint-initdb.d/my.cnf
       # データベース作成
       - ./db/sql/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
       # テーブル作成
