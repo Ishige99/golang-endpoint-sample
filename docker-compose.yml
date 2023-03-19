@@ -1,22 +1,25 @@
-version: '3'
+# Docker Composeのフォーマットバージョンを指定（3.9）
+version: '3.9'
 
 services:
+  # MySQLコンテナ設定
   mysql:
     image: mysql:8
-    container_name: test-mysql
-    restart: always
+    container_name: endpoint-sample-mysql
+    # エラーでコンテナが落ちた際のみ自動で再起動を行います
+    restart: on-failure
+    # 環境設定はrootユーザーのみ設定を行います。
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test-db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: ppassword
-      TZ: Asia/Tokyo
     ports:
       - 3307:3307
-    tmpfs:
-      - /var/lib/mysql
     volumes:
-      - ./conf/my.cnf:/etc/mysql/conf.d/my.cnf
+      # DB設定ファイル
+      - ./db/my.cnf:/docker-entrypoint-initdb.d/my.cnf
+      # データベース作成
+      - ./db/sql/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
+      # テーブル作成
+      - ./db/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
