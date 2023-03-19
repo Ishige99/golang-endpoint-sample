@@ -20,17 +20,19 @@ services:
       # test_dbにarticleテーブルの作成
       - ./db/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
 
+  # phpMyAdminコンテナ設定
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: test-phpmyadmin
+    container_name: endpoint-sample-phpmyadmin
     environment:
-      - PMA_ARBITRARY=1
       - PMA_HOST=mysql
       - PMA_USER=root
       - PMA_PASSWORD=root
     links:
       - mysql
+    # 'http://localhost:4040'
     ports:
       - 4040:80
-    volumes:
-      - ./phpmyadmin/sessions:/sessions
+    # `mysql`が実行された後に`phpmyadmin`実行をします
+    depends_on:
+      - mysql
