@@ -34,7 +34,7 @@
 % curl -X GET 'http://localhost:8080/article' | jq
 // JSON Responce (all article)
 
-% curl -X POST -H 'Content-Type: application/json' --data '{"title": "hoge","description": "hogei","content": "hohogehoge"}' 'http://localhost:8080/post-article'
+% curl -X POST 'http://localhost:8080/article' -H 'Content-Type: application/json' --data '{"title": "hoge","description": "hohoge","content": "hogehoge"}'
 // POST article data
 ```
 
