@@ -8,10 +8,11 @@ services:
     container_name: endpoint-sample-mysql
     # エラーでコンテナが落ちた際のみ自動で再起動を行います
     restart: on-failure
+    command: --port 3307
     # 環境設定はrootユーザーのみ設定を行います。
     environment:
-      MYSQL_ROOT_PASSWORD: root
-    # 'http://localhost:3307:3307'
+      MYSQL_ROOT_PASSWORD: 'root'
+    # 'http://localhost:3307'
     ports:
       - 3307:3307
     volumes:
