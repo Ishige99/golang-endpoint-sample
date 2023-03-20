@@ -12,13 +12,11 @@ func main() {
 	// DB接続情報はmain関数の実行後に終了します。（サーバーが起動している間は保持し続けます）
 	defer db.Close()
 
+	// テストエンドポイント
 	http.HandleFunc("/", TestHandler)
 
-	// articleテーブルの全カラムを取り出すエンドポイント
-	http.HandleFunc("/article", GetArticleHandler)
-
-	// articleテーブルにPOSTするエンドポイント
-	http.HandleFunc("/post-article", CreateArticleHandler)
+	// article関連のエンドポイントになります。
+	http.HandleFunc("/article", ArticleHandler)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

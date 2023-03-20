@@ -12,19 +12,28 @@ func TestHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: /")
 }
 
+// -------------------------------------
+// -------メソッドごとに分岐をします---------
+// -------------------------------------
+
+func ArticleHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		fmt.Println("Endpoint Hit '/article', GET All Articles")
+		GetArticleHandler(w, r)
+	case http.MethodPost:
+		fmt.Println("Endpoint Hit '/article', POST Article")
+		CreateArticleHandler(w, r)
+	default:
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed) // 405
+	}
+}
+
 // -----------------------------
 // -------記事投稿ハンドラ---------
 // -----------------------------
 
 func CreateArticleHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Endpoint Hit '/post-article', Post article")
-
-	// POSTメソッド以外のアクセスは受け付けません
-	if r.Method != http.MethodPost {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed) // 405
-		return
-	}
-
 	// POSTパラメータのJSON値をGoで扱える状態(JSONデコーダ)に変換
 	decoder := json.NewDecoder(r.Body)
 
@@ -69,8 +78,6 @@ func CreateArticleHandler(w http.ResponseWriter, r *http.Request) {
 // -----------------------------
 
 func GetArticleHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Endpoint Hit '/article', Get all article")
-
 	// articleテーブルから対象のレコードデータを取得します。
 	rows, err := db.Query("SELECT id, title, description, content FROM article")
 
