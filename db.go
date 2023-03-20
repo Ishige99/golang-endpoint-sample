@@ -7,19 +7,20 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// DB接続情報をグローバル変数にすることで、handler.goなどの他ファイルでも呼び出せるようにしてます
+var db *sql.DB
+
 func InitDB() {
 	// DSNの作成(DB接続情報)
 	dsn := "root:root@tcp(127.0.0.1:3307)/test_db"
 
+	var err error
+
 	// MySQLに接続
-	db, err := sql.Open("mysql", dsn)
+	db, err = sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatal(err) // エラーがあればログに出力して終了
 	}
-
-	// 関数終了時に、DBへの接続を終了する。
-	// main関数で使用されているので、main関数の終了次第DBの接続を解除する
-	defer db.Close()
 
 	// 実際にDBとの接続を確認
 	err = db.Ping()

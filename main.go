@@ -6,10 +6,11 @@ import (
 )
 
 func main() {
-	// データベースに接続を行う
-	// 成功：Success database connect.
-	// 失敗：エラー出力しサーバー自体立ち上がりません。
+	// データベースに接続を行います。
 	InitDB()
+
+	// DB接続情報はmain関数の実行後に終了します。（サーバーが起動している間は保持し続けます）
+	defer db.Close()
 
 	http.HandleFunc("/", TestHandler)
 
