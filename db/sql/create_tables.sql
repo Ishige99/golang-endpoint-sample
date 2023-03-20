@@ -6,6 +6,8 @@ CREATE TABLE `article` (
    `title` VARCHAR(255) NOT NULL,
    `description` VARCHAR(255) NOT NULL,
    `content` TEXT NOT NULL,
+   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (`id`)
 );
 
