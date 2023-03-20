@@ -1,10 +1,12 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func TestHandler(w http.ResponseWriter, r *http.Request) {
@@ -17,8 +19,17 @@ func TestHandler(w http.ResponseWriter, r *http.Request) {
 // -------------------------------------
 
 func ArticleHandler(w http.ResponseWriter, r *http.Request) {
+	// リクエストパラメータに`id`があるか確認をします。
+	hasID := r.URL.Query().Has("id")
+
+	// リクエストの条件によって、ハンドラを切り替えます。
 	switch r.Method {
 	case http.MethodGet:
+		if hasID {
+			fmt.Println("Endpoint Hit '/article', GET Single Article")
+			GetSingleArticleHandler(w, r)
+			return
+		}
 		fmt.Println("Endpoint Hit '/article', GET All Articles")
 		GetArticleHandler(w, r)
 	case http.MethodPost:
@@ -73,9 +84,9 @@ func CreateArticleHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Article created with ID: %d\n", lastInsertedID)
 }
 
-// -----------------------------
-// -------記事取得ハンドラ---------
-// -----------------------------
+// --------------------------------
+// -------全体記事取得ハンドラ---------
+// --------------------------------
 
 func GetArticleHandler(w http.ResponseWriter, r *http.Request) {
 	// articleテーブルから対象のレコードデータを取得します。
@@ -108,4 +119,41 @@ func GetArticleHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(articles)
+}
+
+// --------------------------------
+// -------単一記事取得ハンドラ---------
+// --------------------------------
+
+func GetSingleArticleHandler(w http.ResponseWriter, r *http.Request) {
+	idString := r.URL.Query().Get("id")
+	id, err := strconv.Atoi(idString)
+
+	// 文字列, 0以下のパラメータが含まれていた場合にエラーを返します。
+	if err != nil || id <= 0 {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	var row *sql.Rows
+	row, err = db.Query("SELECT id, title, description, content FROM article WHERE id = ?", id)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError) // 500
+		return
+	}
+	defer row.Close()
+
+	var article Article
+	if row.Next() {
+		if err = row.Scan(&article.ID, &article.Title, &article.Description, &article.Content); err != nil {
+			log.Fatal(w, err.Error(), http.StatusInternalServerError) // 500
+		}
+	} else {
+		http.Error(w, "Article not found", http.StatusNotFound) // 404
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(article)
 }
