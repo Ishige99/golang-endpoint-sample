@@ -32,7 +32,10 @@
 // Hello My Server
 
 % curl -X GET 'http://localhost:8080/article' | jq
-// JSON Responce (all article)
+// GET all articles
+
+% curl -X GET 'http://localhost:8080/article?id=1' | jq
+// GET single articles
 
 % curl -X POST 'http://localhost:8080/article' -H 'Content-Type: application/json' --data '{"title": "hoge","description": "hohoge","content": "hogehoge"}'
 // POST article data
