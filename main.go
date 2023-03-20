@@ -15,8 +15,10 @@ func main() {
 	http.HandleFunc("/", TestHandler)
 
 	// articleテーブルの全カラムを取り出すエンドポイント
-	// 'http://localhost:8080/article'
 	http.HandleFunc("/article", GetArticleHandler)
+
+	// articleテーブルにPOSTするエンドポイント
+	http.HandleFunc("/post-article", CreateArticleHandler)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

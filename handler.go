@@ -12,7 +12,61 @@ func TestHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: /")
 }
 
-// -------受け取ったパラメータに応じて取得す内容を変える記事取得のハンドラ---------
+// -----------------------------
+// -------記事投稿ハンドラ---------
+// -----------------------------
+
+func CreateArticleHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Endpoint Hit '/post-article', Post article")
+
+	// POSTメソッド以外のアクセスは受け付けません
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed) // 405
+		return
+	}
+
+	// POSTパラメータのJSON値をGoで扱える状態(JSONデコーダ)に変換
+	decoder := json.NewDecoder(r.Body)
+
+	// リクエストボディも保持し続けるとメモリを圧迫するので、ハンドラ関数の終了時にデータは解放をする
+	defer r.Body.Close()
+
+	var newArticle Article
+
+	// JSONデコーダからnewArticle構造体にデコードを行います
+	err := decoder.Decode(&newArticle)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest) // 400
+		return
+	}
+
+	// クエリを実行して、articleテーブルにINSERTします
+	result, err := db.Exec(
+		`INSERT INTO article (title, description, content)
+		VALUES 	(?, ?, ?);`,
+		newArticle.Title,
+		newArticle.Description,
+		newArticle.Content,
+	)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// レスポンスに出力するため、最後に投稿したIDを取得
+	lastInsertedID, err := result.LastInsertId()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	fmt.Fprintf(w, "Article created with ID: %d\n", lastInsertedID)
+}
+
+// -----------------------------
+// -------記事取得ハンドラ---------
+// -----------------------------
 
 func GetArticleHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit '/article', Get all article")
