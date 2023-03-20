@@ -11,7 +11,7 @@ services:
     command: --port 3307
     # 環境設定はrootユーザーのみ設定を行います。
     environment:
-      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: root
     # 'http://localhost:3307'
     ports:
       - 3307:3307
@@ -29,6 +29,7 @@ services:
       - PMA_HOST=mysql
       - PMA_USER=root
       - PMA_PASSWORD=root
+      - PMA_PORT=3307
     links:
       - mysql
     # 'http://localhost:4040'

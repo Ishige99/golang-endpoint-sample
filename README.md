@@ -38,3 +38,4 @@
 - [【Docker】MySQLを簡単に構築](https://zenn.dev/re24_1986/articles/153cdc5db96dc0)
 - [【Docker】MySQLワークベンチに繋がらない…DBコンテナのポートフォワーディングの設定](https://qiita.com/ryuji-oda/items/c3ed1b86fe0c1f2b9058)
 - [Go言語でデータベース（MySQL）に接続する方法](https://nishinatoshiharu.com/connect-go-database/)
+- [phpMyAdmin / Docs > インストール](https://docs.phpmyadmin.net/ja/latest/setup.html)
