@@ -1,6 +1,6 @@
 # endpoint-sample
 
-## Env
+## Development Environment
 
 - MacBook Pro(M1,2021)
 - macOS Monterey v12.2.1
@@ -10,19 +10,44 @@
   - mysql  Ver 8.0.32 for Linux on aarch64
   - phpMyAdmin v5.2.1
 
+## Directory Structure
+
+```shell
+.
+├── README.md
+├── db
+│   └── sql
+│       ├── create_database.sql
+│       └── create_tables.sql
+├── db.go
+├── docker-compose.yml
+├── go.mod
+├── go.sum
+├── handler.go
+├── main.go
+└── struct.go 
+```
+
 ## Build
 
-- Start Endpoint Server
+- Start DB Server: MySQL/phpMyAdmin
+
+```shell
+% docker-compose up -d
+// MySQL: 'localhost:3307'
+// phpMyAdmin: 'localhost:4040'
+
+% docker exec -i -t endpoint-sample-mysql /bin/bash
+% mysql -u root -p
+Enter password: root
+// Connect MySQL
+```
+
+- Start API Server
 
 ```shell
 % go build .
 % ./main
-```
-
-- Start MySQL / phpMyAdmin
-
-```shell
-% docker-compose up -d
 ```
 
 ## Request

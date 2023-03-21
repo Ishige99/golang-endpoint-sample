@@ -12,6 +12,7 @@ var db *sql.DB
 
 func InitDB() {
 	// DSNの作成(DB接続情報)
+	// TODO: 環境変数で持ってもいいかも
 	dsn := "root:root@tcp(127.0.0.1:3307)/test_db"
 
 	var err error
